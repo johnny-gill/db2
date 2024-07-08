@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 
 /**
  * scanBasePackages 경로외에 생성자 주입이 안되므로, Bean을 통해 주입을 한다!!!
@@ -21,6 +22,7 @@ public class Db2Application {
     }
 
     @Bean
+    @Profile("local")
     public TestDataInit testDataInit(ItemRepository itemRepository) {
         return new TestDataInit(itemRepository);
     }
