@@ -2,6 +2,7 @@ package com.example.db2;
 
 import com.example.db2.config.JdbcTemplateV1Config;
 import com.example.db2.config.JdbcTemplateV2Config;
+import com.example.db2.config.JdbcTemplateV3Config;
 import com.example.db2.config.MemoryConfig;
 import com.example.db2.repository.ItemRepository;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +18,8 @@ import org.springframework.context.annotation.Profile;
 
 //@Import(MemoryConfig.class)
 //@Import(JdbcTemplateV1Config.class)
-@Import(JdbcTemplateV2Config.class)
+//@Import(JdbcTemplateV2Config.class)
+@Import(JdbcTemplateV3Config.class)
 @SpringBootApplication(scanBasePackages = "com.example.db2.web")
 public class Db2Application {
 
