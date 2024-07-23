@@ -1,10 +1,14 @@
 package com.example.db2.repository;
 
 import com.example.db2.domain.Item;
+import com.example.db2.repository.jdbctemplate.JdbcTemplateItemRepositoryV3;
 import com.example.db2.repository.memory.MemoryItemRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,11 +18,23 @@ class ItemRepositoryTest {
     @Autowired
     ItemRepository itemRepository;
 
-    @AfterEach
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
+    TransactionStatus status;
+
+    @BeforeEach
     void beforeEach() {
+        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+    }
+
+    @AfterEach
+    void afterEach() {
         if (itemRepository instanceof MemoryItemRepository) {
             ((MemoryItemRepository) itemRepository).clearStore();
         }
+
+        transactionManager.rollback(status);
     }
 
     @Test
@@ -73,10 +89,12 @@ class ItemRepositoryTest {
         Item saveItem = itemRepository.save(item);
         ItemUpdateDto updateItem = new ItemUpdateDto("칙촉", 10, 2000);
         itemRepository.update(saveItem.getId(), updateItem);
-
+        Item findItem = itemRepository
+                .findById(saveItem.getId())
+                .orElseThrow();
         // then
-        assertThat(saveItem.getItemName()).isEqualTo(updateItem.getItemName());
-        assertThat(saveItem.getPrice()).isEqualTo(updateItem.getPrice());
-        assertThat(saveItem.getQuantity()).isEqualTo(updateItem.getQuantity());
+        assertThat(findItem.getItemName()).isEqualTo(updateItem.getItemName());
+        assertThat(findItem.getPrice()).isEqualTo(updateItem.getPrice());
+        assertThat(findItem.getQuantity()).isEqualTo(updateItem.getQuantity());
     }
 }
