@@ -1,32 +1,34 @@
 package com.example.db2.repository;
 
 import com.example.db2.domain.Item;
-import com.example.db2.repository.jdbctemplate.JdbcTemplateItemRepositoryV3;
 import com.example.db2.repository.memory.MemoryItemRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
+
+//@Commit // 롤백말고 commit을 해준다.
+@Transactional
 @SpringBootTest
 class ItemRepositoryTest {
 
     @Autowired
     ItemRepository itemRepository;
 
-    @Autowired
-    PlatformTransactionManager transactionManager;
-
-    TransactionStatus status;
-
-    @BeforeEach
-    void beforeEach() {
-        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-    }
+//    @Autowired
+//    PlatformTransactionManager transactionManager;
+//
+//    TransactionStatus status;
+//
+//    @BeforeEach
+//    void beforeEach() {
+//        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+//    }
 
     @AfterEach
     void afterEach() {
@@ -34,7 +36,7 @@ class ItemRepositoryTest {
             ((MemoryItemRepository) itemRepository).clearStore();
         }
 
-        transactionManager.rollback(status);
+//        transactionManager.rollback(status);
     }
 
     @Test
