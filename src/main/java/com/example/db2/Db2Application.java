@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Profile;
 //@Import(MyBatisConfig.class)
 //    @Import(JpaConfig.class)
 //    @Import(SpringDataJpaConfig.class)
-    @Import(QuerydslConfig.class)
+//    @Import(QuerydslConfig.class)
+    @Import(V2Config.class)
 @SpringBootApplication(scanBasePackages = "com.example.db2.web")
 public class Db2Application {
 
